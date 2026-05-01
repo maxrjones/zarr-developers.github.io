@@ -75,4 +75,4 @@ NumFOCUS Sponsored Projects rely on the generous support of corporate sponsors, 
 
 ## Acknowledgements
 
-Hero animation adapted from [`dynamical-zarr-ecmwf`](https://github.com/developmentseed/deck.gl-raster/tree/main/examples/dynamical-zarr-ecmwf) in [developmentseed/deck.gl-raster](https://github.com/developmentseed/deck.gl-raster), © 2025 Development Seed (MIT License). Full notice: [NOTICE.md](https://github.com/zarr-developers/zarr-developers.github.io/blob/main/NOTICE.md).
+Hero animation adapted from [`dynamical-zarr-ecmwf`](https://github.com/developmentseed/deck.gl-raster/tree/main/examples/dynamical-zarr-ecmwf) in [developmentseed/deck.gl-raster](https://github.com/developmentseed/deck.gl-raster)

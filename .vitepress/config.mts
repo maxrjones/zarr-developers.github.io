@@ -6,6 +6,7 @@ export default defineConfig({
   description: 'Zarr is a community project to develop specifications and software for storage of large N-dimensional typed arrays, also commonly known as tensors.',
   cleanUrls: true,
   lastUpdated: true,
+  sitemap: { hostname: 'https://zarr.dev' },
   head: [
     ['link', { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' }],
@@ -16,6 +17,16 @@ export default defineConfig({
     ['meta', { name: 'apple-mobile-web-app-title', content: 'Zarr' }],
     ['meta', { name: 'application-name', content: 'Zarr' }],
     ['meta', { name: 'theme-color', content: '#ffffff' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'Zarr' }],
+    ['meta', { property: 'og:title', content: 'Zarr' }],
+    ['meta', { property: 'og:description', content: 'An open, community-driven format for storing large arrays in any key-value store, including cloud object storage.' }],
+    ['meta', { property: 'og:image', content: 'https://zarr.dev/android-chrome-512x512.png' }],
+    ['meta', { property: 'og:url', content: 'https://zarr.dev/' }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:title', content: 'Zarr' }],
+    ['meta', { name: 'twitter:description', content: 'An open, community-driven format for storing large arrays in any key-value store, including cloud object storage.' }],
+    ['meta', { name: 'twitter:image', content: 'https://zarr.dev/android-chrome-512x512.png' }],
     ['script', { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-BCRR9QE7Z0' }],
     ['script', {}, `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -25,6 +36,7 @@ gtag('config', 'G-BCRR9QE7Z0');`],
   srcExclude: [
     'docs/**',
     'README.md',
+    'NOTICE.md',
   ],
   vite: {
     plugins: [redirectsPlugin(defaultPluginOptions(process.cwd()))],
