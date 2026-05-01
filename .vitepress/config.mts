@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { redirectsPlugin, defaultPluginOptions } from './plugins/redirects'
 
 export default defineConfig({
   title: 'Zarr',
@@ -31,6 +32,9 @@ gtag('config', 'G-BCRR9QE7Z0');`],
     'slides.md',
     'README.md',
   ],
+  vite: {
+    plugins: [redirectsPlugin(defaultPluginOptions(process.cwd()))],
+  },
   themeConfig: {
     search: { provider: 'local' },
   },
