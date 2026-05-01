@@ -6,8 +6,8 @@ hero:
   text: Chunked, compressed, N-dimensional arrays
   tagline: An open, community-driven format for storing large arrays in any key-value store, including cloud object storage.
   image:
-    src: /images/llc4320_sst.png
-    alt: Sea surface temperature visualization, credit Ryan Abernathey
+    src: /images/zarr-hero.gif
+    alt: Animated ECMWF temperature forecast rendered from a Zarr store, credit Development Seed (deck.gl-raster)
   actions:
     - theme: brand
       text: Implementations
@@ -72,3 +72,7 @@ NumFOCUS Sponsored Projects rely on the generous support of corporate sponsors, 
 [Videos](https://www.youtube.com/playlist?list=PLvkeNUPrCU04Xvcph4ErxsRkZq28Oucr7) of community members talking about Zarr. If you have a video you'd like us to share, let us know!
 
 <iframe width="640" height="480" src="https://www.youtube.com/embed/videoseries?list=PLvkeNUPrCU04Xvcph4ErxsRkZq28Oucr7" frameborder="0" allowfullscreen></iframe>
+
+## Acknowledgements
+
+Hero animation adapted from [`dynamical-zarr-ecmwf`](https://github.com/developmentseed/deck.gl-raster/tree/main/examples/dynamical-zarr-ecmwf) in [developmentseed/deck.gl-raster](https://github.com/developmentseed/deck.gl-raster), © 2025 Development Seed (MIT License). Full notice: [NOTICE.md](https://github.com/zarr-developers/zarr-developers.github.io/blob/main/NOTICE.md).
