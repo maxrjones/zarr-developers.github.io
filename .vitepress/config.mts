@@ -25,7 +25,6 @@ gtag('config', 'G-BCRR9QE7Z0');`],
   srcExclude: [
     'docs/**',
     'office_hours/**',
-    'adopters/index.md',
     'slides.md',
     'README.md',
   ],
