@@ -1,7 +1,15 @@
 import { defineConfig } from 'vitepress'
 import { redirectsPlugin, defaultPluginOptions } from './plugins/redirects'
 
+// Read the path prefix from RTD's canonical URL env var when present
+// (e.g. https://<slug>.readthedocs.build/en/171/ → /en/171/), so all
+// asset URLs resolve correctly under the PR-preview subpath. Defaults
+// to '/' for the GitHub Pages build at zarr.dev.
+const rtdUrl = process.env.READTHEDOCS_CANONICAL_URL
+const base = rtdUrl ? new URL(rtdUrl).pathname : '/'
+
 export default defineConfig({
+  base,
   title: 'Zarr',
   description: 'Zarr is a community project to develop specifications and software for storage of large N-dimensional typed arrays, also commonly known as tensors.',
   cleanUrls: true,
