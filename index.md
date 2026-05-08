@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: Zarr
-  text: The open foundation for chunked, N-dimensional arrays
+  text: The open foundation for chunked, compressed, N-dimensional arrays
   tagline: A specification, implementations in 10 languages, and an ecosystem of datasets and tools, built by an open community.
   # Hero image area is filled by ZarrHero.vue via the home-hero-image
   # theme slot (see .vitepress/theme/index.ts).
