@@ -19,6 +19,34 @@
   display: none;
 }
 
+/* Dark-mode overrides for components — kept here (unscoped) because
+   Vue's scoped CSS mishandles `:global(.dark) .selector` rules for
+   non-inheriting properties. Class selectors match regardless of the
+   data-v hash on each component's elements. */
+
+.dark .zarr-hero {
+  --zarr-coral-1: #f5d2dc;
+  --zarr-coral-2: #e89bb8;
+  --zarr-coral-3: #c25e92;
+  --zarr-stroke: #faf7f2;
+  --zarr-grid: rgba(255, 255, 255, 0.12);
+  --zarr-glow: rgba(232, 155, 184, 0.7);
+}
+
+/* Many adopter logos (CarbonPlan, ESA, LEAP, etc.) are dark-monochrome
+   and vanish on a dark background. Pill them onto a near-white canvas
+   in dark mode so every card reads, light or dark. Right long-term fix
+   is curated dark-variant logos per adopter — this keeps the page
+   legible in the meantime. */
+.dark .zarr-wall__logo-frame {
+  background: #f7f7f8;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.dark .zarr-wall__logo-frame img {
+  max-height: 60px;
+}
+
 /* Give the cube room to breathe on desktop. Default VitePress sizing
    makes the SVG too small relative to the hero text column. */
 @media (min-width: 960px) {

@@ -76,6 +76,11 @@ defineProps<{ entries: Entry[] }>()
   max-width: 80%;
   object-fit: contain;
 }
+
+/* Dark-mode rescue for monochrome-dark adopter logos lives in
+   .vitepress/theme/custom.css (unscoped). Vue's scoped CSS collapses
+   `:global(.dark) .selector` to just `.dark` for non-inheriting
+   properties, so this kind of theme override has to be unscoped. */
 .zarr-wall__name-frame {
   font-weight: 700;
   font-size: 18px;
