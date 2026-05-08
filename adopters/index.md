@@ -37,7 +37,7 @@ const stats = computed(() => {
 <PageHero
   eyebrow="Adopters"
   headline="Used in production by leaders across science and industry."
-  lead="From climate-scale Earth observation to peta-scale connectomics, Zarr is how teams move large arrays through cloud storage and analysis pipelines."
+  lead="From peta-scale Earth observation to connectomics imaging, Zarr is how teams move large arrays through cloud storage and analysis pipelines."
 >
   <template #meta>
     <div class="adopters-stats">

@@ -1,26 +1,30 @@
 <script setup lang="ts">
-// The SVG is loaded as a raw string (Vite `?raw` import) and rendered
-// via v-html so that the inline <style> tag inside the SVG (which
-// carries the @keyframes for the chunked-cube reveal) survives Vue's
-// template compiler. v-pre alone does NOT prevent the compiler from
-// stripping <style>/<script> tags from templates, so we have to bypass
-// template compilation entirely.
+// The chunked-cube SVG lives at /public/zarr-hero.svg and is loaded
+// via fetch() on mount. Two reasons:
+//   1. Keeps the home page's inline HTML payload small — the SVG is
+//      ~60 KB and was previously inlined via `?raw` + v-html.
+//   2. Lets the SVG's inline <style> block (which carries the @keyframes
+//      for the chunk reveal) survive into the DOM — fetch + innerHTML
+//      preserves <style> tags exactly.
+//
+// The host div uses `v-once` so Vue does not try to reconcile against
+// the imperatively-injected SVG. The popup is a sibling, not a child,
+// so Vue still owns that branch.
 //
 // Reveal: ~3s one-shot. Each chunk has class="c cN"; the cN class drives
 // its individual chunkIn_N keyframe (opacity 0 → 1) and a SMIL translate
 // (off-screen → in-place). After the reveal, chunks settle.
 //
-// Interactivity: hovering a chunk dims the rest of the cube and shows
-// a small callout giving that chunk's address (chunk[x,y,z], derived
-// from its index in the 3×3×3 grid) and a deterministic 4×4 mini-grid
-// representing its "data". Conveys Zarr's value: chunks are
-// independently addressable and each one carries its own contents.
+// Interactivity: hovering a chunk dims the rest and surfaces a callout
+// with the chunk's address (chunk[z, y, x] derived from visual rank in
+// the 3×3×3 grid), shape, and codec. Click/tap selects; tapping outside
+// the cube dismisses. Conveys: chunks are independently addressable and
+// each one carries its own compressed contents.
 //
-// Click/tap selects the chunk; tapping outside the cube dismisses.
-// SSR-safe: handlers attach only on mount.
+// SSR-safe: handlers and SVG injection happen only on mount.
 
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import svg from './zarr-hero.svg?raw'
+import { withBase } from 'vitepress'
 
 interface Hovered {
   index: number
@@ -28,6 +32,7 @@ interface Hovered {
 }
 
 const wrap = ref<HTMLDivElement | null>(null)
+const svgHost = ref<HTMLDivElement | null>(null)
 const hovered = ref<Hovered | null>(null)
 
 let currentChunk: Element | null = null
@@ -40,8 +45,8 @@ let cleanup: (() => void) | null = null
 let visualRank = new WeakMap<Element, number>()
 let visualRankBuilt = false
 
-function buildVisualRank(root: HTMLElement): void {
-  const chunks = Array.from(root.querySelectorAll<Element>('.c'))
+function buildVisualRank(host: HTMLElement): void {
+  const chunks = Array.from(host.querySelectorAll<Element>('.c'))
   const sorted = chunks
     .map((el) => ({ el, r: el.getBoundingClientRect() }))
     .sort((a, b) => a.r.top - b.r.top || a.r.left - b.r.left)
@@ -55,45 +60,71 @@ function rankCoords(rank: number): [number, number, number] {
   return [Math.floor(rank / 9), Math.floor(rank / 3) % 3, rank % 3]
 }
 
-// Deterministic per-chunk compression stats. Same seed each hover, so
-// the same chunk shows the same numbers — emphasizes that chunks are
-// independent units with their own compressed payloads, and that
-// compression ratios vary with the data each chunk happens to hold.
-function chunkStats(rank: number): { ratio: string } {
-  let seed = (rank + 1) * 16807
-  seed = (seed * 1103515245 + 12345) & 0x7fffffff
-  // 4× – 12×: typical for scientific arrays with zstd + shuffle, the
-  // pattern used by ARCO-ERA5, CMIP6 cloud archives, and most production
-  // Zarr stores. Conservative end of what's actually seen in practice;
-  // sparse / quantized data routinely hits 20×+ but we keep the range
-  // tight so the popup reads as a credible default, not a brag.
-  const r = 4 + ((seed % 1000) / 1000) * 8
-  return { ratio: r.toFixed(1) }
-}
-
 const coords = computed(() =>
   hovered.value ? rankCoords(hovered.value.index).join(', ') : '',
 )
-const stats = computed(() =>
-  hovered.value ? chunkStats(hovered.value.index) : { ratio: '' },
-)
 
+// Popup positioning with edge detection. The popup sits 14 px to the
+// right of the chunk by default. If that would push it past the viewport
+// right edge (e.g. on a narrow mobile viewport), we flip to the left of
+// the chunk; if neither fits, we center horizontally in the viewport.
+// Vertical: top-align with the chunk; flip below if it would overflow.
 const calloutStyle = computed(() => {
   if (!hovered.value || !wrap.value) return {}
   const w = wrap.value.getBoundingClientRect()
   const r = hovered.value.rect
-  return {
-    left: `${r.right - w.left + 14}px`,
-    top: `${r.top - w.top - 8}px`,
+
+  // Estimated callout dimensions (matches the rendered min-width and
+  // typical content height; close enough for placement decisions).
+  const POPUP_W = 200
+  const POPUP_H = 90
+  const GAP = 14
+  const MARGIN = 8
+
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
+
+  let left: number
+  if (r.right + GAP + POPUP_W <= vw - MARGIN) {
+    left = r.right - w.left + GAP
+  } else if (r.left - GAP - POPUP_W >= MARGIN) {
+    left = r.left - w.left - GAP - POPUP_W
+  } else {
+    // Center horizontally in viewport (very narrow screens).
+    left = vw / 2 - w.left - POPUP_W / 2
   }
+
+  let top: number
+  if (r.top + POPUP_H <= vh - MARGIN) {
+    top = r.top - w.top - 8
+  } else {
+    top = r.bottom - w.top + 8
+  }
+
+  return { left: `${left}px`, top: `${top}px` }
 })
 
-onMounted(() => {
+onMounted(async () => {
   const root = wrap.value
-  if (!root) return
+  const host = svgHost.value
+  if (!root || !host) return
+
+  // Fetch and inject the SVG. innerHTML preserves the inline <style>
+  // block carrying @keyframes; v-once on the host div tells Vue not to
+  // touch the injected content.
+  try {
+    const res = await fetch(withBase('/zarr-hero.svg'))
+    if (res.ok) {
+      host.innerHTML = await res.text()
+    }
+  } catch {
+    // Network failure — leave the host empty. The wrapper's aria-label
+    // still describes what should be here for screen readers.
+    return
+  }
 
   const set = (chunk: Element) => {
-    if (!visualRankBuilt) buildVisualRank(root)
+    if (!visualRankBuilt) buildVisualRank(host)
     if (currentChunk && currentChunk !== chunk) {
       currentChunk.classList.remove('is-hovered')
     }
@@ -115,11 +146,9 @@ onMounted(() => {
   const onOver = (e: PointerEvent) => {
     const target = e.target as Element | null
     const chunk = target?.closest?.('.c')
-    if (chunk && root.contains(chunk)) set(chunk)
+    if (chunk && host.contains(chunk)) set(chunk)
   }
   const onOut = (e: PointerEvent) => {
-    // Only clear when leaving the entire wrapper (not when sliding
-    // between chunks).
     const related = e.relatedTarget as Element | null
     if (related && root.contains(related)) return
     clear()
@@ -127,17 +156,19 @@ onMounted(() => {
   const onClick = (e: Event) => {
     const target = e.target as Element | null
     const chunk = target?.closest?.('.c')
-    if (chunk && root.contains(chunk)) set(chunk)
+    if (chunk && host.contains(chunk)) set(chunk)
     else clear()
   }
 
-  root.addEventListener('pointerover', onOver)
-  root.addEventListener('pointerout', onOut)
-  root.addEventListener('click', onClick)
+  // Listeners attach on the SVG host (where the chunks now live), not
+  // the wrapper, so the popup itself doesn't intercept hover events.
+  host.addEventListener('pointerover', onOver)
+  host.addEventListener('pointerout', onOut)
+  host.addEventListener('click', onClick)
   cleanup = () => {
-    root.removeEventListener('pointerover', onOver)
-    root.removeEventListener('pointerout', onOut)
-    root.removeEventListener('click', onClick)
+    host.removeEventListener('pointerover', onOver)
+    host.removeEventListener('pointerout', onOut)
+    host.removeEventListener('click', onClick)
   }
 })
 
@@ -149,8 +180,9 @@ onBeforeUnmount(() => cleanup?.())
     ref="wrap"
     class="zarr-hero"
     :class="{ 'has-hover': hovered }"
+    aria-label="Zarr animated chunked cube"
   >
-    <div class="zarr-hero__svg" v-html="svg" />
+    <div ref="svgHost" class="zarr-hero__svg" v-once />
     <Transition name="callout">
       <div v-if="hovered" class="zarr-callout" :style="calloutStyle">
         <div class="zarr-callout__addr">chunk[{{ coords }}]</div>
@@ -161,7 +193,7 @@ onBeforeUnmount(() => cleanup?.())
           </div>
           <div>
             <dt>codec</dt>
-            <dd>zstd · <strong>{{ stats.ratio }}×</strong> compressed</dd>
+            <dd>zstd</dd>
           </div>
         </dl>
       </div>
@@ -193,22 +225,22 @@ onBeforeUnmount(() => cleanup?.())
   --zarr-glow: rgba(232, 155, 184, 0.7);
 }
 
+.zarr-hero__svg {
+  /* Reserve space so layout doesn't shift while the SVG fetches in. */
+  aspect-ratio: 560 / 480;
+  width: 100%;
+}
 .zarr-hero :deep(svg) {
   display: block;
   width: 100%;
   height: auto;
 }
 
-/* Each chunk is interactive — hover/tap to reveal its address and a
-   data preview in the floating callout. */
 .zarr-hero :deep(.c) {
   cursor: pointer;
   transition: opacity 200ms ease, filter 200ms ease;
 }
 
-/* When ANY chunk is hovered/selected, dim the rest so the focused
-   chunk reads clearly. !important is needed because each chunk has
-   `animation-fill-mode: forwards` holding its post-reveal opacity. */
 .zarr-hero.has-hover :deep(.c:not(.is-hovered)) {
   opacity: 0.32 !important;
 }
@@ -218,7 +250,6 @@ onBeforeUnmount(() => cleanup?.())
           drop-shadow(0 0 14px var(--zarr-glow));
 }
 
-/* Floating callout */
 .zarr-callout {
   position: absolute;
   z-index: 10;
@@ -263,10 +294,6 @@ onBeforeUnmount(() => cleanup?.())
   color: var(--vp-c-text-2);
   line-height: 1.4;
 }
-.zarr-callout__meta dd strong {
-  color: var(--vp-c-text-1);
-  font-weight: 600;
-}
 
 .callout-enter-active,
 .callout-leave-active {
@@ -278,8 +305,6 @@ onBeforeUnmount(() => cleanup?.())
   transform: scale(0.95);
 }
 
-/* Reduced motion: disable the reveal stagger and the callout's
-   scale-in. Hover/tap behaviour stays. */
 @media (prefers-reduced-motion: reduce) {
   .zarr-hero :deep(.c) {
     animation: none !important;
