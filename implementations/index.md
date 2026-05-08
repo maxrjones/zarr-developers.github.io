@@ -1,20 +1,10 @@
 ---
-layout: single
-author_profile: false
 title: Zarr Implementations
-sidebar:
-  title: "Content"
-  nav: sidebar
 ---
 
-<font size="4">
-Zarr is a data storage format based on an open-source <a
-href="https://zarr-specs.readthedocs.io/">specification</a>, making
-implementations across several languages possible. It is used in various
-domains, including geospatial, bio-imaging, genomics, data science, and HPC. 🌏🔬🧬<br><br>
+Zarr is a data storage format based on an open-source [specification](https://zarr-specs.readthedocs.io/), making implementations across several languages possible. It is used in various domains, including geospatial, bio-imaging, genomics, data science, and HPC. 🌏🔬🧬
 
-Zarr version 2 and 3 implementations are listed (in alphabetical order per language) as follows:<br><br>
-</font>
+Zarr version 2 and 3 implementations are listed (in alphabetical order per language) as follows:
 
 | Language               | Implementation         | V2| V3| Latest Release/Commit        |
 |------------------------|------------------------|---|---|------------------------------|
@@ -100,9 +90,6 @@ Zarr version 2 and 3 implementations are listed (in alphabetical order per langu
 [ExZarr-lu]: https://img.shields.io/github/last-commit/saalfeldlab/n5-zarr
 
 
-<font size="4">
-→ Feel free to add any missing implementations by sending a PR to the website <a href="https://github.com/zarr-developers/zarr-developers.github.io/">repository</a>. 🤝🏻<br><br>
+→ Feel free to add any missing implementations by sending a PR to the website [repository](https://github.com/zarr-developers/zarr-developers.github.io/). 🤝🏻
 
-→ Get involved in various Zarr implementations by fixing bugs, resolving issues, improving documentation, or contributing to the codebase.
-If you've been doing any of these activities recently, we invite you to join our <a href="https://zarr.dev/community-calls/">community meetings</a> and share your work with us. We'd be delighted to showcase your efforts. 💪🏻
-</font>
+→ Get involved in various Zarr implementations by fixing bugs, resolving issues, improving documentation, or contributing to the codebase. If you've been doing any of these activities recently, we invite you to join our [community meetings](https://zarr.dev/community-calls/) and share your work with us. We'd be delighted to showcase your efforts. 💪🏻

@@ -1,59 +1,65 @@
 ---
-# You don't need to edit this file, it's empty on purpose.
-# Edit theme's home layout instead if you wanna make some changes
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-layout: single
-author_profile: false
-sidebar:
-  title: "Content"
-  nav: sidebar
-excerpt: "Have beautiful data in Zarr? Show us on Bluesky!"
-header:
-  overlay_image: /images/llc4320_sst.png
-  overlay_filter: 0.5 # same as adding an opacity of 0.5 to a black background
-  caption: "Credit: Ryan Abernathey"
-  actions:
-    - label: "Share here!"
-      url: "https://bsky.app/intent/compose?text=@zarr.dev%20%23beautifuldata"
----
+layout: home
 
-Zarr is a community project to develop specifications and software for
-storage of large N-dimensional typed arrays, also commonly known as
-tensors. A particular focus of Zarr is to provide support for storage
-using distributed systems like cloud object stores, and to enable
-efficient I/O for parallel computing applications.
+hero:
+  name: Zarr
+  text: Chunked, compressed, N-dimensional arrays
+  tagline: An open, community-driven format for storing large arrays in any key-value store, including cloud object storage.
+  image:
+    src: /images/zarr-hero.gif
+    alt: Animated ECMWF temperature forecast rendered from a Zarr store, credit Development Seed (deck.gl-raster)
+  actions:
+    - theme: brand
+      text: Implementations
+      link: /implementations
+    - theme: alt
+      text: Specification
+      link: https://zarr-specs.readthedocs.io/
+    - theme: alt
+      text: Share on Bluesky
+      link: https://bsky.app/intent/compose?text=@zarr.dev%20%23beautifuldata
+
+features:
+  - title: Implementations
+    details: Zarr libraries in Python, C, C++, Rust, JavaScript, Java, Julia, and more.
+    link: /implementations
+  - title: Conventions
+    details: Domain conventions like OME-Zarr, GeoZarr, and Anndata layered on top of Zarr.
+    link: /conventions
+  - title: Community
+    details: Office hours, ZEPs, community calls, and chat. Everyone is welcome.
+    link: /community
+  - title: Datasets
+    details: Public Zarr datasets across climate, bio-imaging, genomics, and more.
+    link: /datasets
+---
 
 ## Description
 
-Zarr is motivated by the need for a simple, transparent, open, and
-community-driven format that supports high-throughput distributed I/O on
-different storage systems. Zarr data can be stored in any storage system that
-can be represented as a key-value store, including most commonly POSIX file
-systems and cloud object storage but also zip files as well as relational and
-document databases.
+Zarr is motivated by the need for a simple, transparent, open, and community-driven format that supports high-throughput distributed I/O on different storage systems. Zarr data can be stored in any storage system that can be represented as a key-value store, including most commonly POSIX file systems and cloud object storage but also zip files as well as relational and document databases.
 
 See the following GitHub repositories for more information:
 
-* [Zarr Python](https://github.com/zarr-developers/zarr)
-* [Zarr Specs](https://github.com/zarr-developers/zarr-specs)
-* [Numcodecs](https://github.com/zarr-developers/numcodecs)
-* [Z5](https://github.com/constantinpape/z5)
-* [N5](https://github.com/saalfeldlab/n5)
-* [Zarr.jl](https://github.com/JuliaIO/Zarr.jl)
-* [ndarray.scala](https://github.com/lasersonlab/ndarray.scala)
+- [Zarr Python](https://github.com/zarr-developers/zarr)
+- [Zarr Specs](https://github.com/zarr-developers/zarr-specs)
+- [Numcodecs](https://github.com/zarr-developers/numcodecs)
+- [Z5](https://github.com/constantinpape/z5)
+- [N5](https://github.com/saalfeldlab/n5)
+- [Zarr.jl](https://github.com/JuliaIO/Zarr.jl)
+- [ndarray.scala](https://github.com/lasersonlab/ndarray.scala)
 
 ## Applications
 
-* Simple and fast serialization of NumPy-like arrays, accessible from languages including Python, C, C++, Rust, Javascript, Java and Julia
-* Multi-scale n-dimensional image storage, e.g. in light and electron microscopy
-* Geospatial rasters, e.g. following the NetCDF / CF metadata conventions
+- Simple and fast serialization of NumPy-like arrays, accessible from languages including Python, C, C++, Rust, Javascript, Java and Julia
+- Multi-scale n-dimensional image storage, e.g. in light and electron microscopy
+- Geospatial rasters, e.g. following the NetCDF / CF metadata conventions
 
 ## Features
 
-* Chunk multi-dimensional arrays along any dimension.
-* Store arrays in memory, on disk, inside a Zip file, on S3, etc.
-* Read and write arrays concurrently from multiple threads or processes.
-* Organize arrays into hierarchies via annotatable groups.
+- Chunk multi-dimensional arrays along any dimension.
+- Store arrays in memory, on disk, inside a Zip file, on S3, etc.
+- Read and write arrays concurrently from multiple threads or processes.
+- Organize arrays into hierarchies via annotatable groups.
 
 ## Sponsorship
 
@@ -63,13 +69,10 @@ NumFOCUS Sponsored Projects rely on the generous support of corporate sponsors, 
 
 ## Videos
 
-[Videos](https://www.youtube.com/playlist?list=PLvkeNUPrCU04Xvcph4ErxsRkZq28Oucr7)
-of community members talking about Zarr. If you have a video you'd like us to share, let us know!
+[Videos](https://www.youtube.com/playlist?list=PLvkeNUPrCU04Xvcph4ErxsRkZq28Oucr7) of community members talking about Zarr. If you have a video you'd like us to share, let us know!
 
-<div class="video">
-    <figure>
-        <iframe width="640" height="480"
-            src="https://www.youtube.com/embed/videoseries?list=PLvkeNUPrCU04Xvcph4ErxsRkZq28Oucr7"
-            frameborder="0" allowfullscreen></iframe>
-    </figure>
-</div>
+<iframe width="640" height="480" src="https://www.youtube.com/embed/videoseries?list=PLvkeNUPrCU04Xvcph4ErxsRkZq28Oucr7" frameborder="0" allowfullscreen></iframe>
+
+## Acknowledgements
+
+Hero animation adapted from [`dynamical-zarr-ecmwf`](https://github.com/developmentseed/deck.gl-raster/tree/main/examples/dynamical-zarr-ecmwf) in [developmentseed/deck.gl-raster](https://github.com/developmentseed/deck.gl-raster)

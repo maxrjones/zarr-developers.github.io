@@ -1,17 +1,8 @@
 ---
-layout: single
-author_profile: false
 title: Zarr Datasets
-sidebar:
-  title: "Content"
-  nav: sidebar
 ---
 
-<font size="4">
-Zarr has been <a href="https://zarr.dev/adopters/">adopted</a> by a variety of
-research groups, universities, organisations, and open-source communities.<br>
-Below is a list of a few examples of public datasets.<br><br>
-</font>
+Zarr has been [adopted](https://zarr.dev/adopters/) by a variety of research groups, universities, organisations, and open-source communities. Below is a list of a few examples of public datasets.
 
 | Dataset                                                                                                           | Hosting               | Size  |
 | ----------------------------------------------------------------------------------------------------------------- | --------------------- | ----- |
@@ -23,13 +14,8 @@ Below is a list of a few examples of public datasets.<br><br>
 | [National Water Model](https://discourse.pangeo.io/t/the-national-water-model-reanalysis-zarr-dataset-on-aws/1449)| Amazon AWS            | 5 TB  |
 | [webKnossos](https://zarr.webknossos.org/)                                                                        | scalableminds GmbH    | 70 TB |
 
-<font size="4">
-<br>If you think your dataset would be a useful example to add to the list,
-feel free to send a PR to the website <a href="https://github.com/zarr-developers/zarr-developers.github.io/">repository</a>.<br><br>
+If you think your dataset would be a useful example to add to the list, feel free to send a PR to the website [repository](https://github.com/zarr-developers/zarr-developers.github.io/).
 
-Please ensure the dataset you're adding to the list is public, free to use,
-documented, and illustrate the application of Zarr within a specific domain.<br><br>
+Please ensure the dataset you're adding to the list is public, free to use, documented, and illustrates the application of Zarr within a specific domain.
 
-Please only include URLs that you expect to be stable and maintained in the
-foreseeable future.
-</font>
+Please only include URLs that you expect to be stable and maintained in the foreseeable future.

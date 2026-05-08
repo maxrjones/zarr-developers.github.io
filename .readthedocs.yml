@@ -1,20 +1,18 @@
-# .readthedocs.yml
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/build-customization.html
+# RTD configures the VitePress base URL automatically at build time.
 
-# Required
 version: 2
 
-# Set the version of Python and other tools you might need
 build:
-  os: ubuntu-24.04
-
+  os: ubuntu-lts-latest
   tools:
-    ruby: "3.4"
-
-  commands:
-    - bundle install
-    - >
-      JEKYLL_ENV=production bundle exec jekyll build --destination
-      _readthedocs/html --baseurl $(echo -n "$READTHEDOCS_CANONICAL_URL" | cut
-      -d '/' -f 4-)
+    nodejs: "latest"
+  jobs:
+    install:
+      - npm ci
+    build:
+      html:
+        - npm run docs:build
+        - mkdir -p $READTHEDOCS_OUTPUT/
+        - mv .vitepress/dist $READTHEDOCS_OUTPUT/html

@@ -1,0 +1,36 @@
+# Each entry maps a path on zarr.dev to an absolute or relative target URL.
+# A buildEnd hook turns this into static meta-refresh stub HTML files
+# under .vitepress/dist/<from>/index.html.
+
+# numcodecs codec docs (mirrors the deleted numcodecs_redirects/ verbatim)
+/numcodecs/adler32:          https://numcodecs.readthedocs.io/en/stable/checksum32.html#adler32
+/numcodecs/astype:           https://numcodecs.readthedocs.io/en/stable/astype.html
+/numcodecs/bitround:         https://numcodecs.readthedocs.io/en/stable/bitround.html
+/numcodecs/blosc:            https://numcodecs.readthedocs.io/en/stable/blosc.html
+/numcodecs/bz2:              https://numcodecs.readthedocs.io/en/stable/bz2.html
+/numcodecs/crc32:            https://numcodecs.readthedocs.io/en/stable/checksum32.html#crc32
+/numcodecs/delta:            https://numcodecs.readthedocs.io/en/stable/delta.html
+/numcodecs/fixedscaleoffset: https://numcodecs.readthedocs.io/en/stable/fixedscaleoffset.html
+/numcodecs/fletcher32:       https://numcodecs.readthedocs.io/en/stable/checksum32.html#fletcher32
+/numcodecs/gzip:             https://numcodecs.readthedocs.io/en/stable/gzip.html
+/numcodecs/jenkins_lookup3:  https://numcodecs.readthedocs.io/en/stable/checksum32.html#jenkinslookup3
+/numcodecs/lz4:              https://numcodecs.readthedocs.io/en/stable/lz4.html
+/numcodecs/lzma:             https://numcodecs.readthedocs.io/en/stable/lzma.html
+/numcodecs:                  https://numcodecs.readthedocs.io/en/stable/
+/numcodecs/packbits:         https://numcodecs.readthedocs.io/en/stable/packbits.html
+/numcodecs/pcodec:           https://numcodecs.readthedocs.io/en/stable/pcodec.html
+/numcodecs/quantize:         https://numcodecs.readthedocs.io/en/stable/quantize.html
+/numcodecs/shuffle:          https://numcodecs.readthedocs.io/en/stable/shuffle.html
+/numcodecs/zfpy:             https://numcodecs.readthedocs.io/en/stable/zfpy.html
+/numcodecs/zlib:             https://numcodecs.readthedocs.io/en/stable/zlib.html
+/numcodecs/zstd:             https://numcodecs.readthedocs.io/en/stable/zstd.html
+
+# URL hygiene: catch any external link to /office_hours/
+/office_hours/:              /office-hours/
+
+# Restored behavior of the deleted about/index.html stub
+/about:                      /
+
+# Vestigial 2019 blog posts -> blog repo
+/2019/05/02/zarr-2.3-release/: https://zarr.dev/blog/release-23/
+/2019/06/19/zarr-v3-update/:   https://zarr.dev/blog/v3-update/
